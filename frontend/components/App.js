@@ -36,7 +36,6 @@ export default class App extends React.Component {
       })
     })
   }
-  
   completeTodo = id => {
     axios.patch(`${URL}/${id}`)
     .then( res => {
@@ -56,6 +55,38 @@ export default class App extends React.Component {
       })
     })
   }
+  changeInput = (key, value) =>{
+    this.setState({
+      ...this.state,
+      form: {...this.state.form, [key]: value}
+    })
+  }
+  /*functions in progress*/
+  addTodo = () => {
+    const newTodo = {
+      name: this.state.form.nameInput,
+      completed: false,
+    }
+    axios.post(URL, newTodo)
+    .then(res => {
+      console.log(res)
+    })
+    .catch(err => {
+      console.error(err)
+    })
+  }
+  clearTodos = () => {
+    axios.delete(`${URL}/${id}`)
+    .then(res => {
+      console.log(res)
+    })
+    .catch(err => {
+      console.error(err)
+    })
+  }
+  
+  
+  
   render() {
     const { errorMessage, form, successMessage, todos } = this.state;
     
@@ -66,7 +97,14 @@ export default class App extends React.Component {
     
     return (
       <div className='App'>
-        <TodoList todos={todos} success={successMessage} complete={this.completeTodo} />
+        <TodoList 
+          success={successMessage}
+          todos={todos} 
+          add={this.addTodo}
+          changeInput={this.changeInput}
+          complete={this.completeTodo}
+          clear={this.clearTodos} 
+        />
       </div>
     )
   }
