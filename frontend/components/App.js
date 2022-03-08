@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import TodoList from './TodoList';
 
 const URL = 'http://localhost:9000/api/todos'
 
@@ -27,8 +28,6 @@ export default class App extends React.Component {
         todos: res.data.data,
         successMessage: res.data.message,
       })
-      console.log(this.state.todos)
-      console.log(this.state.successMessage)
     })
     .catch(err => {
       this.setState({
@@ -38,7 +37,27 @@ export default class App extends React.Component {
     })
   }
   
+  completeTodo = id => {
+    axios.patch(`${url}/${id}`)
+    .then( res => {
+      console.log(res)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
   render() {
-    return null
+    const { errorMessage, form, successMessage, todos } = this.state;
+    
+    // console.log(`errorMessage: ${errorMessage}`)
+    // console.log(`forminfo: ${form}`)
+    // console.log(`successMessage: ${successMessage}`)
+    // console.log(`todos: ${todos}`)
+    
+    return (
+      <div className='App'>
+        <TodoList todos={todos} success={successMessage} complete={this.completeTodo} />
+      </div>
+    )
   }
 }
