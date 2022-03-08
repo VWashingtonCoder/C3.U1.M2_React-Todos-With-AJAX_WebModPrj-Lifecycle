@@ -38,12 +38,22 @@ export default class App extends React.Component {
   }
   
   completeTodo = id => {
-    axios.patch(`${url}/${id}`)
+    axios.patch(`${URL}/${id}`)
     .then( res => {
       console.log(res)
+      this.setState({
+        ...this.state,
+        todos: this.state.todos.map(todo => {
+          return todo.id === id ? {...todo, completed: true} : todo
+        }),
+        successMessage: res.data.message,
+      })
     })
     .catch(err => {
-      console.log(err)
+      this.setState({
+        ...this.state,
+        errorMessage: err
+      })
     })
   }
   render() {

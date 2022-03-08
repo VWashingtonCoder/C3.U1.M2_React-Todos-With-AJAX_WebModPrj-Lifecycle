@@ -3,7 +3,6 @@ import React from 'react'
 export default class Todo extends React.Component {
   render() {
     const { complete, info } = this.props
-    console.log(info)
     return (
       <div className='todo'>
         <h3
