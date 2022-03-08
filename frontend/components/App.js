@@ -88,7 +88,7 @@ export default class App extends React.Component {
   
   
   render() {
-    const { errorMessage, form, successMessage, todos } = this.state;
+    const { form, successMessage, todos } = this.state;
     
     // console.log(`errorMessage: ${errorMessage}`)
     // console.log(`forminfo: ${form}`)
@@ -99,9 +99,10 @@ export default class App extends React.Component {
       <div className='App'>
         <TodoList 
           success={successMessage}
-          todos={todos} 
-          add={this.addTodo}
-          changeInput={this.changeInput}
+          todos={todos}
+          values={form} 
+          onSubmit={this.addTodo}
+          onChange={this.changeInput}
           complete={this.completeTodo}
           clear={this.clearTodos} 
         />

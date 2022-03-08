@@ -1,9 +1,10 @@
 import React from 'react';
 import Todo from './Todo';
+import Form from './Form';
 
 export default class TodoList extends React.Component {
   render() {
-    const { complete, success, todos } = this.props
+    const { clear, complete, onChange, onSubmit, success, todos, values } = this.props
     return (
       <div className='todo-list'>
         {success}
@@ -16,6 +17,12 @@ export default class TodoList extends React.Component {
             />
           )
         })}
+        <Form 
+          values={values}
+          onSubmit={onSubmit}
+          onChange={onChange}
+          clear={clear}
+        />
       </div>
     )
   }
