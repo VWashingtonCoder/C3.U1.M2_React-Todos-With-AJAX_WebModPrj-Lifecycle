@@ -11,7 +11,8 @@ const initialState = {
   form: {
     nameInput: "",
     completed: false,
-  }, 
+  },
+  completedTodos: true, 
 }
 export default class App extends React.Component {
   state = initialState;
@@ -19,7 +20,6 @@ export default class App extends React.Component {
   componentDidMount(){
     this.getTodos()
   }
-
   getTodos = () => {
     axios.get(URL)
     .then(res=>{
@@ -36,6 +36,24 @@ export default class App extends React.Component {
       })
     })
   }
+  addTodo = () => {
+    const newTodo = {
+      name: this.state.form.nameInput,
+      completed: false,
+    }
+    axios.post(URL, newTodo)
+    .then(res => {
+      this.setState({
+        ...this.state,
+        todos: [ ...this.state.todos, res.data.data ],
+        successMessage: res.data.message, 
+        form: initialState.form,
+      })
+    })
+    .catch(err => {
+      this.setState({ ...this.state, errorMessage: err.response.data.message })
+    })
+  }
   completeTodo = id => {
     axios.patch(`${URL}/${id}`)
     .then( res => {
@@ -43,7 +61,7 @@ export default class App extends React.Component {
       this.setState({
         ...this.state,
         todos: this.state.todos.map(todo => {
-          return todo.id === id ? {...todo, completed: true} : todo
+          return todo.id === id ? res.data.data : todo
         }),
         successMessage: res.data.message,
       })
@@ -62,39 +80,13 @@ export default class App extends React.Component {
     })
   }
   /*functions in progress*/
-  addTodo = () => {
-    const newTodo = {
-      name: this.state.form.nameInput,
-      completed: false,
-    }
-    axios.post(URL, newTodo)
-    .then(res => {
-      console.log(res)
-    })
-    .catch(err => {
-      console.error(err)
-    })
-  }
   clearTodos = () => {
-    axios.delete(`${URL}/${id}`)
-    .then(res => {
-      console.log(res)
-    })
-    .catch(err => {
-      console.error(err)
-    })
+    this.setState({ ...this.state, completedTodos: !this.state.completedTodos })
   }
-  
-  
   
   render() {
-    const { form, successMessage, todos } = this.state;
-    
-    // console.log(`errorMessage: ${errorMessage}`)
-    // console.log(`forminfo: ${form}`)
-    // console.log(`successMessage: ${successMessage}`)
-    // console.log(`todos: ${todos}`)
-    
+    const { form, successMessage, todos, completedTodos } = this.state;
+
     return (
       <div className='App'>
         <TodoList 
@@ -105,6 +97,7 @@ export default class App extends React.Component {
           onChange={this.changeInput}
           complete={this.completeTodo}
           clear={this.clearTodos} 
+          completed={completedTodos}
         />
       </div>
     )

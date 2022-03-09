@@ -11,9 +11,8 @@ export default class Form extends React.Component {
   }
 
   render() {
-    const { values, clear } = this.props
-    console.log(values)
-    
+    const { values, clear, completed } = this.props
+
     return (
       <div className='input-form'>
         <form onSubmit={this.onSubmit}>
@@ -26,7 +25,7 @@ export default class Form extends React.Component {
           />
           <input type="submit" />
         </form>
-        <button onClick={() => clear()}>Clear Completed Todos</button>
+        <button onClick={() => clear()}>{ completed ? "Hide" : "Show"} Completed Todos</button>
       </div>
     )
   }
